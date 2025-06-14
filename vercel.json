@@ -5,10 +5,5 @@
       "source": "/config.js",
       "destination": "/api/config"
     }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  ]
 } 
