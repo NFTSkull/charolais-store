@@ -17,7 +17,5 @@
       "source": "/(.*\\.(js|css|html|png|jpg|jpeg|gif|svg|ico|JPG))",
       "destination": "/public/$1"
     }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false
+  ]
 } 
