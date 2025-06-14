@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Charolais</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #DAA520;
+            --accent-color: #CD853F;
+            --dark-brown: #3E2723;
+            --cream: #F5F5DC;
+            --warm-white: #FEFEFE;
+            --gray-100: #F8F9FA;
+            --gray-200: #E9ECEF;
+            --gray-600: #6C757D;
+            --gray-800: #343A40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: var(--gray-800);
+        }
+
+        /* Header */
+        .admin-header {
+            background: linear-gradient(135deg, var(--dark-brown) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-brand h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .admin-brand .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        /* Layout */
+        .admin-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            padding: 2rem 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-right: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--gray-100);
+            color: var(--primary-color);
+            border-right-color: var(--primary-color);
+        }
+
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .admin-main {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: var(--dark-brown);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-600);
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-brown);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: var(--gray-600);
+            margin: 0;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #7a3d11;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark-brown);
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-1px);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table th {
+            background: var(--gray-100);
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .table tr:hover {
+            background: var(--gray-100);
+        }
+
+        /* Product Cards */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-brown);
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-stock {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .stock-high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .stock-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .stock-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .stock-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Image Upload */
+        .image-upload-area {
+            border: 2px dashed var(--gray-300);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            background: var(--gray-100);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-upload-area:hover,
+        .image-upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(139, 69, 19, 0.05);
+        }
+
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .image-preview-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-brown);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-600);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--gray-200);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                order: 2;
+            }
+
+            .admin-main {
+                order: 1;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="admin-brand">
+            <i class="fas fa-store"></i>
+            <div>
+                <h1>Charolais</h1>
+                <div class="subtitle">Panel de Administración</div>
+            </div>
+        </div>
+        <nav class="admin-nav">
+            <div class="admin-user">
+                <i class="fas fa-user"></i>
+                <span id="admin-username">Admin</span>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Cerrar Sesión
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <nav>
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="#" class="menu-link active" data-page="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-link" data-page="products">
+                            <i class="fas fa-box"></i>
+                            Productos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-link" data-page="categories">
+                            <i class="fas fa-tags"></i>
+                            Categorías
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-link" data-page="stock">
+                            <i class="fas fa-warehouse"></i>
+                            Inventario
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-link" data-page="images">
+                            <i class="fas fa-images"></i>
+                            Imágenes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-link" data-page="settings">
+                            <i class="fas fa-cog"></i>
+                            Configuración
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Resumen general de la tienda</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="total-products">0</h3>
+                        <p>Total Productos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="low-stock-count">0</h3>
+                        <p>Stock Bajo</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="out-of-stock-count">0</h3>
+                        <p>Sin Stock</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="total-categories">0</h3>
+                        <p>Categorías</p>
+                    </div>
+                </div>
+
+                <!-- Recent Products -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Productos Recientes</h2>
+                        <a href="#" class="btn btn-primary" onclick="showPage('products')">
+                            <i class="fas fa-plus"></i>
+                            Ver Todos
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div id="recent-products" class="products-grid">
+                            <!-- Products will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Page -->
+            <div id="products-page" class="page hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Gestión de Productos</h1>
+                    <p class="page-subtitle">Agregar, editar y eliminar productos</p>
+                </div>
+
+                <!-- Add Product Button -->
+                <div style="margin-bottom: 2rem;">
+                    <button class="btn btn-primary" onclick="showAddProductModal()">
+                        <i class="fas fa-plus"></i>
+                        Agregar Producto
+                    </button>
+                </div>
+
+                <!-- Products Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Lista de Productos</h2>
+                        <div>
+                            <input type="text" id="product-search" class="form-control" placeholder="Buscar productos..." style="width: 250px;">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Imagen</th>
+                                        <th>Nombre</th>
+                                        <th>Categoría</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="products-table-body">
+                                    <!-- Products will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Page -->
+            <div id="categories-page" class="page hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Categorías</h1>
+                    <p class="page-subtitle">Gestionar categorías de productos</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Lista de Categorías</h2>
+                        <button class="btn btn-primary" onclick="showAddCategoryModal()">
+                            <i class="fas fa-plus"></i>
+                            Agregar Categoría
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="categories-list">
+                            <!-- Categories will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Page -->
+            <div id="stock-page" class="page hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Control de Inventario</h1>
+                    <p class="page-subtitle">Gestionar stock de productos</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Productos con Stock Bajo</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="low-stock-products">
+                            <!-- Low stock products will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Todos los Productos</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Stock Actual</th>
+                                        <th>Stock Mínimo</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stock-table-body">
+                                    <!-- Stock data will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Images Page -->
+            <div id="images-page" class="page hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Gestión de Imágenes</h1>
+                    <p class="page-subtitle">Administrar imágenes de productos</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Subir Imágenes</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="image-upload-area" id="bulk-image-upload">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--gray-600); margin-bottom: 1rem;"></i>
+                            <h3>Arrastra y suelta imágenes aquí</h3>
+                            <p>o haz clic para seleccionar archivos</p>
+                            <input type="file" id="bulk-image-input" multiple accept="image/*" style="display: none;">
+                        </div>
+                        <div id="bulk-image-preview" class="image-preview">
+                            <!-- Preview images will be shown here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Imágenes de Productos</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="product-images-grid">
+                            <!-- Product images will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings-page" class="page hidden">
+                <div class="page-header">
+                    <h1 class="page-title">Configuración</h1>
+                    <p class="page-subtitle">Configuración general del sistema</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Configuración de Stock</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="stock-settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Stock Mínimo por Defecto</label>
+                                <input type="number" class="form-control" id="default-min-stock" min="0" value="5">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Alerta de Stock Bajo</label>
+                                <input type="number" class="form-control" id="low-stock-alert" min="0" value="10">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Guardar Configuración
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="add-product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Agregar Producto</h3>
+                <button class="modal-close" onclick="closeModal('add-product-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-product-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="product-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Categoría</label>
+                            <select class="form-control" id="product-category" required>
+                                <option value="">Seleccionar categoría</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="product-price" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="product-stock" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" id="product-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Imágenes</label>
+                        <div class="image-upload-area" id="product-image-upload">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--gray-600); margin-bottom: 0.5rem;"></i>
+                            <p>Arrastra imágenes aquí o haz clic para seleccionar</p>
+                            <input type="file" id="product-image-input" multiple accept="image/*" style="display: none;">
+                        </div>
+                        <div id="product-image-preview" class="image-preview">
+                            <!-- Preview images will be shown here -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('add-product-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveProduct()">
+                    <i class="fas fa-save"></i>
+                    Guardar Producto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div id="edit-product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Producto</h3>
+                <button class="modal-close" onclick="closeModal('edit-product-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-product-form">
+                    <input type="hidden" id="edit-product-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="edit-product-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Categoría</label>
+                            <select class="form-control" id="edit-product-category" required>
+                                <option value="">Seleccionar categoría</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="edit-product-price" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="edit-product-stock" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" id="edit-product-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Imágenes Actuales</label>
+                        <div id="edit-product-current-images" class="image-preview">
+                            <!-- Current images will be shown here -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Agregar Nuevas Imágenes</label>
+                        <div class="image-upload-area" id="edit-product-image-upload">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--gray-600); margin-bottom: 0.5rem;"></i>
+                            <p>Arrastra nuevas imágenes aquí o haz clic para seleccionar</p>
+                            <input type="file" id="edit-product-image-input" multiple accept="image/*" style="display: none;">
+                        </div>
+                        <div id="edit-product-image-preview" class="image-preview">
+                            <!-- New preview images will be shown here -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('edit-product-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="updateProduct()">
+                    <i class="fas fa-save"></i>
+                    Actualizar Producto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stock Update Modal -->
+    <div id="stock-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Actualizar Stock</h3>
+                <button class="modal-close" onclick="closeModal('stock-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="stock-update-form">
+                    <input type="hidden" id="stock-product-id">
+                    <div class="form-group">
+                        <label class="form-label">Producto</label>
+                        <input type="text" class="form-control" id="stock-product-name" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Stock Actual</label>
+                        <input type="number" class="form-control" id="stock-current" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Stock Mínimo</label>
+                        <input type="number" class="form-control" id="stock-minimum" min="0" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('stock-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="updateStock()">
+                    <i class="fas fa-save"></i>
+                    Actualizar Stock
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alert-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+    <script src="admin-panel.js"></script>
+</body>
+</html> 

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Panel de Administración Charolais</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #DAA520;
+            --accent-color: #CD853F;
+            --dark-brown: #3E2723;
+            --cream: #F5F5DC;
+            --warm-white: #FEFEFE;
+            --gray-100: #F8F9FA;
+            --gray-200: #E9ECEF;
+            --gray-600: #6C757D;
+            --gray-800: #343A40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-brown) 0%, var(--primary-color) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: var(--dark-brown);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--gray-600);
+        }
+
+        .login-form {
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #7a3d11;
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--gray-200);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Charolais</h1>
+            <p>Panel de Administración</p>
+        </div>
+
+        <div id="alert" class="alert"></div>
+
+        <form id="login-form" class="login-form">
+            <div class="form-group">
+                <label class="form-label" for="username">
+                    <i class="fas fa-user"></i> Usuario
+                </label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">
+                    <i class="fas fa-lock"></i> Contraseña
+                </label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+            </button>
+        </form>
+
+        <div id="loading" class="loading"></div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const alertDiv = document.getElementById('alert');
+            const loadingDiv = document.getElementById('loading');
+            const submitBtn = document.querySelector('button[type="submit"]');
+
+            // Show loading
+            loadingDiv.style.display = 'block';
+            submitBtn.disabled = true;
+            alertDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Login successful
+                    alertDiv.className = 'alert alert-success';
+                    alertDiv.textContent = 'Iniciando sesión...';
+                    alertDiv.style.display = 'block';
+                    
+                    // Redirect to admin panel
+                    setTimeout(() => {
+                        window.location.href = '/admin-panel';
+                    }, 1000);
+                } else {
+                    // Login failed
+                    alertDiv.className = 'alert alert-danger';
+                    alertDiv.textContent = data.error || 'Error al iniciar sesión';
+                    alertDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alertDiv.className = 'alert alert-danger';
+                alertDiv.textContent = 'Error de conexión';
+                alertDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Cancelado - Charolais</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .cancel-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--dark-brown) 0%, var(--primary-color) 100%);
+            padding: var(--space-lg);
+        }
+
+        .cancel-card {
+            background: var(--warm-white);
+            border-radius: var(--border-radius-xl);
+            padding: var(--space-3xl);
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            max-width: 600px;
+            width: 100%;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .cancel-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-xl);
+        }
+
+        .cancel-icon i {
+            font-size: 4rem;
+            color: white;
+        }
+
+        .cancel-title {
+            font-family: var(--font-primary);
+            font-size: 2.5rem;
+            color: var(--dark-brown);
+            margin-bottom: var(--space-md);
+        }
+
+        .cancel-subtitle {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            color: var(--gray-700);
+            margin-bottom: var(--space-xl);
+        }
+
+        .cancel-message {
+            background: var(--gray-50);
+            border-radius: var(--border-radius-md);
+            padding: var(--space-lg);
+            margin: var(--space-xl) 0;
+            text-align: left;
+        }
+
+        .cancel-message h3 {
+            color: var(--dark-brown);
+            margin-bottom: var(--space-md);
+        }
+
+        .cancel-actions {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: var(--space-xl);
+        }
+
+        .btn-cancel {
+            padding: var(--space-md) var(--space-xl);
+            border: none;
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition-normal);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--warm-white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: var(--warm-white);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .cancel-card {
+                padding: var(--space-xl);
+            }
+
+            .cancel-title {
+                font-size: 2rem;
+            }
+
+            .cancel-actions {
+                flex-direction: column;
+            }
+
+            .btn-cancel {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cancel-container">
+        <div class="cancel-card">
+            <div class="cancel-icon">
+                <i class="fas fa-times"></i>
+            </div>
+            
+            <h1 class="cancel-title">Pago Cancelado</h1>
+            <p class="cancel-subtitle">Tu pago ha sido cancelado. No te preocupes, no se ha realizado ningún cargo.</p>
+            
+            <div class="cancel-message">
+                <h3>¿Qué pasó?</h3>
+                <p>Has cancelado el proceso de pago. Esto puede suceder por varias razones:</p>
+                <ul style="margin-left: var(--space-lg); margin-top: var(--space-sm);">
+                    <li>Decidiste no continuar con la compra</li>
+                    <li>Hubo un problema con tu método de pago</li>
+                    <li>Necesitas revisar los detalles antes de confirmar</li>
+                </ul>
+            </div>
+            
+            <div class="cancel-actions">
+                <a href="/" class="btn-cancel btn-primary">
+                    <i class="fas fa-home"></i>
+                    Volver a la Tienda
+                </a>
+                <a href="#" class="btn-cancel btn-secondary" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                    Intentar de Nuevo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Restaurar carrito si existe en localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedCart = localStorage.getItem('charolais-cart');
+            if (savedCart) {
+                console.log('🛒 Carrito restaurado después de cancelación');
+            }
+            
+            // Mostrar mensaje de ayuda
+            setTimeout(() => {
+                console.log('💡 Si necesitas ayuda, contacta a nuestro equipo de soporte');
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/config.js",
+      "destination": "/api/config"
+    }
+  ],
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "@vercel/node@18"
+    }
+  }
+} 

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Compra Exitosa! - Charolais</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .success-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--dark-brown) 0%, var(--primary-color) 100%);
+            padding: var(--space-lg);
+        }
+
+        .success-card {
+            background: var(--warm-white);
+            border-radius: var(--border-radius-xl);
+            padding: var(--space-3xl);
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            max-width: 600px;
+            width: 100%;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-xl);
+            animation: bounce 2s infinite;
+        }
+
+        .success-icon i {
+            font-size: 4rem;
+            color: white;
+        }
+
+        .success-title {
+            font-family: var(--font-primary);
+            font-size: 2.5rem;
+            color: var(--dark-brown);
+            margin-bottom: var(--space-md);
+        }
+
+        .success-subtitle {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            color: var(--gray-700);
+            margin-bottom: var(--space-xl);
+        }
+
+        .first-purchase-badge {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--border-radius-lg);
+            font-weight: 600;
+            margin-bottom: var(--space-xl);
+            display: inline-block;
+        }
+
+        .order-details {
+            background: var(--gray-50);
+            border-radius: var(--border-radius-md);
+            padding: var(--space-lg);
+            margin: var(--space-xl) 0;
+            text-align: left;
+        }
+
+        .order-details h3 {
+            color: var(--dark-brown);
+            margin-bottom: var(--space-md);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-sm);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: var(--space-xl);
+        }
+
+        .btn-success {
+            padding: var(--space-md) var(--space-xl);
+            border: none;
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition-normal);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--warm-white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: var(--warm-white);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .success-card {
+                padding: var(--space-xl);
+            }
+
+            .success-title {
+                font-size: 2rem;
+            }
+
+            .success-actions {
+                flex-direction: column;
+            }
+
+            .btn-success {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            
+            <h1 class="success-title">¡Compra Exitosa!</h1>
+            <p class="success-subtitle">Gracias por tu compra. Tu pedido ha sido procesado correctamente.</p>
+            
+            <div id="first-purchase-badge" class="first-purchase-badge" style="display: none;">
+                <i class="fas fa-gift"></i>
+                ¡Envío GRATIS en tu primera compra!
+            </div>
+            
+            <div class="order-details">
+                <h3>Detalles del Pedido</h3>
+                <div class="detail-row">
+                    <span>Número de Pedido:</span>
+                    <span id="order-id">Cargando...</span>
+                </div>
+                <div class="detail-row">
+                    <span>Fecha:</span>
+                    <span id="order-date">Cargando...</span>
+                </div>
+                <div class="detail-row">
+                    <span>Total:</span>
+                    <span id="order-total">Cargando...</span>
+                </div>
+                <div class="detail-row">
+                    <span>Estado:</span>
+                    <span style="color: #28a745; font-weight: 600;">Confirmado</span>
+                </div>
+            </div>
+            
+            <div class="success-actions">
+                <a href="/" class="btn-success btn-primary">
+                    <i class="fas fa-home"></i>
+                    Volver a la Tienda
+                </a>
+                <a href="#" class="btn-success btn-secondary" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                    Imprimir Recibo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Marcar que el usuario ha completado su primera compra
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+            const isFirstPurchase = localStorage.getItem('charolais-checkout-in-progress') === 'true';
+            
+            // Mostrar badge de primera compra si corresponde
+            if (isFirstPurchase) {
+                document.getElementById('first-purchase-badge').style.display = 'inline-block';
+                
+                // Marcar que ya no es primera compra
+                localStorage.setItem('charolais-has-purchased', 'true');
+                localStorage.removeItem('charolais-checkout-in-progress');
+                
+                // Mostrar mensaje especial
+                console.log('🎉 ¡Primera compra completada! Envío gratis aplicado.');
+            }
+            
+            // Simular carga de detalles del pedido
+            setTimeout(() => {
+                document.getElementById('order-id').textContent = sessionId ? `#${sessionId.slice(-8).toUpperCase()}` : '#CHAR' + Math.random().toString(36).substr(2, 6).toUpperCase();
+                document.getElementById('order-date').textContent = new Date().toLocaleDateString('es-MX');
+                document.getElementById('order-total').textContent = '$' + (localStorage.getItem('charolais-cart-total') || '0');
+            }, 1000);
+            
+            // Limpiar carrito después de compra exitosa
+            localStorage.removeItem('charolais-cart');
+            
+            // Mostrar notificación de éxito
+            setTimeout(() => {
+                if (isFirstPurchase) {
+                    alert('¡Felicitaciones! Has completado tu primera compra con envío GRATIS. ¡Gracias por elegir Charolais!');
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 

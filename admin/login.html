@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Charolais</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #DAA520;
+            --accent-color: #CD853F;
+            --dark-brown: #3E2723;
+            --cream: #F5F5DC;
+            --warm-white: #FEFEFE;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-brown) 0%, var(--primary-color) 50%, #2A1810 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><text x="10" y="15" font-size="12" text-anchor="middle" fill="%23D4AF37" opacity="0.1">★</text></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .login-container {
+            background: var(--warm-white);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-brown) 100%);
+            color: var(--warm-white);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid var(--warm-white);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-header::after {
+            content: '🤠';
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .login-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            color: var(--cream);
+        }
+
+        .login-form {
+            padding: 3rem 2rem 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--dark-brown);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+            background: var(--warm-white);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-brown) 100%);
+            color: var(--warm-white);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #dc3545;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--warm-white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-footer {
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .login-footer p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .back-to-store {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .back-to-store:hover {
+            background: rgba(139, 69, 19, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Decorative elements */
+        .horseshoe-decoration {
+            position: absolute;
+            top: 10%;
+            right: 5%;
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--secondary-color);
+            border-top: none;
+            border-radius: 0 0 30px 30px;
+            transform: rotate(-10deg);
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        .star-decoration {
+            position: absolute;
+            bottom: 15%;
+            left: 8%;
+            font-size: 2rem;
+            color: var(--secondary-color);
+            animation: twinkle 4s ease-in-out infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: rotate(-10deg) translateY(0px); }
+            50% { transform: rotate(-10deg) translateY(-10px); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 1rem;
+                max-width: 100%;
+            }
+
+            .login-header {
+                padding: 2.5rem 1.5rem 1.5rem;
+            }
+
+            .login-title {
+                font-size: 1.8rem;
+            }
+
+            .login-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .horseshoe-decoration,
+            .star-decoration {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Decorative elements -->
+    <div class="horseshoe-decoration"></div>
+    <div class="star-decoration">★</div>
+
+    <div class="login-container">
+        <div class="login-header">
+            <h1 class="login-title">CHAROLAIS</h1>
+            <p class="login-subtitle">Panel de Administración</p>
+        </div>
+
+        <div class="login-form">
+            <div id="error-message" class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="error-text"></span>
+            </div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label">Usuario</label>
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" class="form-control" id="username" name="username" required placeholder="Ingresa tu usuario">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="Ingresa tu contraseña">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login" id="login-btn">
+                    <span class="loading-spinner" id="loading-spinner"></span>
+                    <i class="fas fa-sign-in-alt"></i>
+                    Iniciar Sesión
+                </button>
+            </form>
+        </div>
+
+        <div class="login-footer">
+            <p>Acceso restringido solo para administradores</p>
+            <a href="/" class="back-to-store">
+                <i class="fas fa-arrow-left"></i>
+                Volver a la Tienda
+            </a>
+        </div>
+    </div>
+
+    <script>
+        class AdminLogin {
+            constructor() {
+                this.form = document.getElementById('login-form');
+                this.usernameInput = document.getElementById('username');
+                this.passwordInput = document.getElementById('password');
+                this.loginBtn = document.getElementById('login-btn');
+                this.loadingSpinner = document.getElementById('loading-spinner');
+                this.errorMessage = document.getElementById('error-message');
+                this.errorText = document.getElementById('error-text');
+
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.checkExistingAuth();
+            }
+
+            setupEventListeners() {
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+
+                // Enter key support
+                this.passwordInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.handleLogin();
+                    }
+                });
+            }
+
+            async checkExistingAuth() {
+                try {
+                    const response = await fetch('/admin/check-auth');
+                    if (response.ok) {
+                        // User is already authenticated, redirect to admin panel
+                        window.location.href = '/admin';
+                    }
+                } catch (error) {
+                    // Not authenticated, stay on login page
+                }
+            }
+
+            async handleLogin() {
+                const username = this.usernameInput.value.trim();
+                const password = this.passwordInput.value;
+
+                if (!username || !password) {
+                    this.showError('Por favor ingresa usuario y contraseña');
+                    return;
+                }
+
+                this.setLoading(true);
+                this.hideError();
+
+                try {
+                    const response = await fetch('/admin/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok && data.success) {
+                        // Success - redirect to admin panel
+                        window.location.href = '/admin';
+                    } else {
+                        this.showError(data.error || 'Error de autenticación');
+                    }
+
+                } catch (error) {
+                    console.error('Login error:', error);
+                    this.showError('Error de conexión. Intenta de nuevo.');
+                } finally {
+                    this.setLoading(false);
+                }
+            }
+
+            setLoading(loading) {
+                this.loginBtn.disabled = loading;
+                this.loadingSpinner.style.display = loading ? 'inline-block' : 'none';
+                
+                if (loading) {
+                    this.loginBtn.style.opacity = '0.7';
+                } else {
+                    this.loginBtn.style.opacity = '1';
+                }
+            }
+
+            showError(message) {
+                this.errorText.textContent = message;
+                this.errorMessage.style.display = 'block';
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    this.hideError();
+                }, 5000);
+            }
+
+            hideError() {
+                this.errorMessage.style.display = 'none';
+            }
+        }
+
+        // Initialize login
+        document.addEventListener('DOMContentLoaded', () => {
+            new AdminLogin();
+        });
+    </script>
+</body>
+</html> 
