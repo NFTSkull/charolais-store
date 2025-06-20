@@ -20,6 +20,11 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
+// Test database connection
+pool.connect()
+  .then(() => console.log('✅ PostgreSQL connected successfully'))
+  .catch(err => console.error('❌ PostgreSQL connection error:', err));
+
 // Configuración de sesiones
 const isProduction = process.env.NODE_ENV === 'production';
 app.use(session({
@@ -93,6 +98,7 @@ const CONFIG = {
     API_BASE_URL: window.location.origin
 };
 window.CONFIG = CONFIG;
+console.log('Charolais Store Config Loaded');
     `);
 });
 
@@ -167,8 +173,7 @@ app.post('/admin/login', async (req, res) => {
             return res.status(400).json({ error: 'Usuario y contraseña requeridos' });
         }
 
-        // For demo purposes, use simple admin credentials
-        // In production, this should be stored in the database with hashed passwords
+        // Simple admin credentials (hardcoded for now)
         if (username === 'admin' && password === 'charolais2024') {
             req.session.adminId = 1;
             req.session.adminUsername = username;
@@ -862,7 +867,7 @@ async function saveOrderToDatabase(session) {
         ]);
 
         const orderId = orderResult.rows[0].id;
-        console.log('�� Orden guardada con ID:', orderId);
+        console.log('✅ Orden guardada con ID:', orderId);
 
         // Guardar items de la orden
         const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
@@ -1041,9 +1046,7 @@ app.get('/health', (req, res) => {
     res.json({ 
         status: 'OK', 
         timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-        environment: process.env.NODE_ENV || 'development',
-        version: '1.0.0'
+        environment: process.env.NODE_ENV || 'development'
     });
 });
 
