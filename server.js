@@ -8,21 +8,26 @@ const session = require('express-session');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
+const { Pool } = require('pg');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Inicializar base de datos
-const db = new sqlite3.Database('charolais.db');
+// Database connection
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+});
 
 // Configuración de sesiones
 const isProduction = process.env.NODE_ENV === 'production';
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'charolais-secret-key-2024',
+    secret: process.env.SESSION_SECRET || 'charolais-secret-key',
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        secure: isProduction, // HTTPS en producción
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
         sameSite: isProduction ? 'strict' : 'lax'
@@ -33,6 +38,8 @@ app.use(session({
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 // Logging middleware
 app.use((req, res, next) => {
